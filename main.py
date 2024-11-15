@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 import sys
-from startsc import StartScreen, SecondScreen
+from startsc import StartScreen, ThirdScreen
  
 #postojannoe
 pygame.init()
@@ -24,9 +24,9 @@ while running:
   for event in pygame.event.get():
     next_screen = current_screen.handle_events(event)
     if next_screen == "game":
-      current_screen = SecondScreen(screen)
+      current_screen = ThirdScreen(screen)
     elif next_screen == "game2":
-      pass  # Switch to the game screen
+      pass  
 
   current_screen.appearance()  # Draw the current screen
   current_screen.update()  # Update the display
