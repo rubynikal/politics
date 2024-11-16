@@ -17,7 +17,7 @@ FramePerSec = pygame.time.Clock()
 
 pygame.display.set_caption("Politics game")
 
-current_screen = ThirdScreen(screen)  # Start with the beginning screen
+current_screen = StartScreen(screen)  # Start with the beginning screen
 running = True
 while running:
   runtime = pygame.time.get_ticks()
