@@ -17,15 +17,16 @@ FramePerSec = pygame.time.Clock()
 
 pygame.display.set_caption("Politics game")
 
-current_screen = StartScreen(screen)  # Start with the beginning screen
+current_screen = ThirdScreen(screen)  # Start with the beginning screen
 running = True
 while running:
+  runtime = pygame.time.get_ticks()
   for event in pygame.event.get():
     next_screen = current_screen.handle_events(event)
     if next_screen == "game":
       current_screen = ThirdScreen(screen)
     elif next_screen == "game2":
-      current_screen =  MainScreen(screen)
+      current_screen =  MainScreen(screen, runtime)
 
   current_screen.appearance()  # Draw the current screen
   current_screen.update()  # Update the display

@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 import sys
+import math
 
 FramePerSec = pygame.time.Clock()
 pygame.display.set_caption("Start Screen")
@@ -123,12 +124,12 @@ class ThirdScreen(Screen):
     # Check timing to control image display
     current_time = pygame.time.get_ticks()
         
-    if self.showing_initial and current_time - self.start_time >= 5000:  # 5 seconds for initial img
+    if self.showing_initial and current_time - self.start_time >= 500:  # 5 seconds for initial img
       self.showing_initial = False
       self.showing_second = True
       self.start_time = pygame.time.get_ticks()
 
-    elif self.showing_second and current_time - self.start_time >= 5000:  # 5 seconds for second img
+    elif self.showing_second and current_time - self.start_time >= 500:  # 5 seconds for second img
       self.showing_second = False  # Prepare for button to appear
 
       # Display images based on state
@@ -147,7 +148,7 @@ class ThirdScreen(Screen):
     elif self.show_after_button:
       # Show first burn img, then switch to second after 1 second
       if not self.show_final_image2:
-        if current_time - self.start_time < 1000:  # final_image1 for 1 second
+        if current_time - self.start_time < 100:  # final_image1 for 1 second #!!!!!!!!!!
           self.screen.blit(self.final_image1, (0, 0))
         else:
           self.show_final_image2 = True  # Switch to final_image2
@@ -160,16 +161,29 @@ class ThirdScreen(Screen):
 
           
 class MainScreen(Screen):
-  def __init__(self,screen):
+  def __init__(self,screen, runtime):
     super().__init__(screen)
-    # Load images
+    #images adn layers
     self.bg_image = pygame.image.load('politics/bg_main.jpeg')
     self.bg_image = pygame.transform.scale(self.bg_image, (screen_width, screen_height))
-    self.crowd_img1 = pygame.image.load('politics/crowd_img1.jpg')
-    self.crowd_img2 = pygame.image.load('politics/crowd_img2.jpg')
+    self.tribuna_layer = pygame.image.load('politics/tribuna_l.png')
+    self.tribuna_layer = pygame.transform.scale(self.tribuna_layer, (screen_width, screen_height))
+
+    self.runtime = runtime
+
+    self.speed = 200
+
+    self.crowd_img1 = pygame.image.load('politics/crowd_img1.png')
+    self.crowd_img1 = pygame.transform.scale(self.crowd_img1, (1110,762))
+    self.crowd_img2 = pygame.image.load('politics/crowd_img2.png')
+    self.crowd_img2 = pygame.transform.scale(self.crowd_img2, (1110,762))
     self.crowd_img3 = pygame.image.load('politics/crowd_img3.png')
+    self.crowd_img3 = pygame.transform.scale(self.crowd_img3, (1110,762))
+    self.crowd_img4 = pygame.image.load('politics/crowd_img4.png')
+    self.crowd_img4 = pygame.transform.scale(self.crowd_img4, (1110,1100))
     self.politician = pygame.image.load('politics/politicianw.png')
     self.politician = pygame.transform.scale(self.politician, (750,850))
+
 
   def handle_events(self, event):
     if event.type == pygame.QUIT:
@@ -179,5 +193,13 @@ class MainScreen(Screen):
       return "game3"
         
   def appearance(self):
+    self.runtime = pygame.time.get_ticks()
     self.screen.blit(self.bg_image, (0, 0))
-    self.screen.blit(self.politician, (265, 250)) 
+    self.screen.blit(self.crowd_img4, (int(200 - math.sin(self.runtime/500)*10/2),int(-250 - math.sin(self.runtime/(self.speed + 250))*10/2))) 
+    self.screen.blit(self.crowd_img2, (int(-250 - math.sin(self.runtime/500)*10/2),int(50 - math.sin(self.runtime/(self.speed + 200))*10/2))) 
+    self.screen.blit(self.crowd_img3, (int(500 - math.sin(self.runtime/500)*10/2),int(0 - math.sin(self.runtime/(self.speed + 230))*10/2))) 
+    self.screen.blit(self.crowd_img1, (int(180 - math.sin(self.runtime/500)*10/2),int(250 - math.sin(self.runtime/(self.speed + 400))*10/2))) 
+    self.screen.blit(self.crowd_img3, (int(-300 - math.sin(self.runtime/500)*10/2),int(50 - math.sin(self.runtime/(self.speed + 200))*10/2))) 
+    self.screen.blit(self.crowd_img2, (int(700 - math.sin(self.runtime/500)*10/2),int(200 - math.sin(self.runtime/(self.speed + 220))*10/2)))
+    self.screen.blit(self.tribuna_layer, (0,0)) 
+    self.screen.blit(self.politician, (265, 250))
