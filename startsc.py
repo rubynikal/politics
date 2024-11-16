@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 import sys
 import math
+import random
 
 FramePerSec = pygame.time.Clock()
 pygame.display.set_caption("Start Screen")
@@ -162,7 +163,37 @@ class ThirdScreen(Screen):
         else:
           self.transition_done = True
 
-          
+
+def create_text(text): #hide chars from text
+  right_chars = []
+
+  for i in range(len(text)):
+    last_char = 0
+    for iteration in range(int(len(text[i]))):
+      rand_char = random.randint(0, len(text[i])-1)
+      if rand_char > last_char and text[i][rand_char] != "□":
+        if text[i][rand_char] != ",":
+          if text[i][rand_char] != ".":
+            if text[i][rand_char] != " ":
+              text_copy = list(text[i])
+              right_chars.append(text_copy[rand_char])
+              text_copy[rand_char] = "□"
+              text[i] = "".join(text_copy)
+              last_char = rand_char
+
+  right_chars = right_chars[::-1]
+  return right_chars, text  
+
+def replace_first_char(chr1,chr2,arr):
+    for i in range(len(arr)):
+        sente = list(arr[i])
+        for a in range(len(sente)):
+          if sente[a] == chr1:
+              sente[a] = chr2
+              arr[i] = "".join(sente)
+              return arr
+
+
 class MainScreen(Screen):
   def __init__(self,screen, runtime, crowd_img1, crowd_img2, crowd_img3):
     super().__init__(screen)
@@ -172,8 +203,20 @@ class MainScreen(Screen):
     self.tribuna_layer = pygame.image.load('politics/tribuna_l.png')
     self.tribuna_layer = pygame.transform.scale(self.tribuna_layer, (screen_width, screen_height))
 
-    self.runtime = runtime
+    self.test = ["Quiero ayudar a la gente.", "Nosotros trabajamos para el pueblo.", "La educación es muy importante.", "Todos tienen derechos.", "Necesitamos paz y justicia.", "La salud es nuestra prioridad.", "Trabajamos por un futuro mejor.", "Los jóvenes son el futuro.", "Queremos un país fuerte.", "Yo creo en el cambio.", "La igualdad es clave.", "Vamos a mejorar la economía.", "Es un honor servir a mi país.", "Todos merecen respeto.", "Queremos más empleos.", "Vamos a apoyar a las familias.", "La cultura es nuestra riqueza.", "Es importante escuchar a todos.", "Juntos somos más fuertes.", "Vamos a construir un mejor país.", "La seguridad es nuestra misión.", "Queremos mejorar la educación.", "Todos merecen una vida digna.", "Vamos a proteger el medio ambiente.", "La salud debe ser accesible.", "Trabajamos para el bien común.", "Vamos a construir más hospitales.", "Los niños son nuestra esperanza.", "La corrupción no es aceptable.", "Hay que cuidar a los ancianos.", "La justicia es para todos.", "Tenemos que trabajar unidos.", "Todos debemos tener una voz.", "Vamos a crear más oportunidades.", "El progreso es nuestra meta.", "Queremos más seguridad en las calles.", "La libertad es muy importante.", "Vamos a ayudar a los agricultores.", "La tecnología es el futuro.", "Tenemos un compromiso con la gente.", "Es necesario reducir la pobreza.", "Los ciudadanos son nuestra fuerza.", "La educación debe ser gratuita.", "El cambio es posible.", "Es importante cuidar nuestros recursos.", "Todos merecen un hogar seguro.", "Vamos a mejorar la infraestructura.", "La honestidad es nuestro valor.", "Necesitamos líderes responsables.", "La democracia es nuestro camino.", "Queremos mejorar nuestras ciudades.", "La educación es un derecho básico.", "La familia es la base de la sociedad.", "Los niños necesitan apoyo.", "Todos merecen una vida mejor.", "Vamos a trabajar por la justicia.", "Nuestro país necesita más oportunidades.", "Vamos a invertir en tecnología.", "Queremos mejorar el sistema de salud.", "La cultura es nuestra identidad.", "Hay que respetar la diversidad.", "Todos somos iguales.", "La paz es nuestro objetivo.", "Vamos a cuidar el medio ambiente.", "La honestidad es nuestra bandera.", "Todos debemos colaborar.", "El respeto es fundamental.", "Vamos a construir más escuelas.", "La ciencia es clave para el progreso.", "Nuestro compromiso es con la verdad.", "La transparencia es importante.", "Vamos a luchar contra la pobreza.", "Necesitamos unirnos como país.", "Todos tenemos el derecho a la libertad.", "La juventud necesita oportunidades.", "Vamos a trabajar con responsabilidad.", "Es importante proteger a los animales.", "La seguridad es nuestra prioridad.", "Vamos a crear empleos.", "El diálogo es fundamental.", "La educación abre puertas.", "Todos merecen igualdad de oportunidades.", "La naturaleza es nuestra riqueza.", "Necesitamos apoyar a las pequeñas empresas.", "Vamos a trabajar con pasión.", "El deporte une a las personas.", "Todos debemos ayudar a los demás.", "El arte nos hace mejores.", "Vamos a promover la cultura.", "Necesitamos cuidarnos unos a otros.", "La paz empieza en casa.", "Es importante pensar en el futuro.", "La educación es una inversión.", "Vamos a proteger nuestros recursos.", "La solidaridad es esencial.", "Los jóvenes tienen mucho que decir.", "Vamos a mejorar nuestras escuelas.", "Todos debemos cuidar el planeta.", "El futuro depende de nosotros.", "La unidad hace la fuerza."]
+    self.test = self.test[0:4]
+    self.char = ""
+    self.right_chars, self.speech = create_text(self.test)
+    print(self.right_chars, self.speech)
+    self.timer = 640
+    self.hint_char = ""
+    pygame.font.init()
+    self.my_font = pygame.font.SysFont('Comic Sans MS', 30)
 
+    self.timer = 640
+    self.clock = pygame.time.Clock()
+
+    self.runtime = runtime
     self.speed = 200
 
     self.crowd_img1 = crowd_img1
@@ -181,7 +224,7 @@ class MainScreen(Screen):
     self.crowd_img3 = crowd_img3
     self.politician = pygame.image.load('politics/politicianw.png')
     self.politician = pygame.transform.scale(self.politician, (750,850))
-
+    
 
   def handle_events(self, event):
     if event.type == pygame.QUIT:
@@ -189,6 +232,36 @@ class MainScreen(Screen):
       sys.exit()
     elif event.type == pygame.MOUSEBUTTONDOWN:
       return "game3"
+    
+    if event.type == pygame.KEYDOWN:
+        #give keyboard input
+        if (len(event.unicode) != 0): #and (ord(event.unicode) >= 32 and ord(event.unicode) <= 126):
+
+            self.char = event.unicode
+            
+            if len(self.right_chars) != 0 and self.char == self.right_chars[-1]:
+                self.speech = replace_first_char("□", self.right_chars[-1], self.speech)
+                self.right_chars.pop()
+
+                self.timer += 15
+                self.hint_char = ""
+
+            if len(self.right_chars) == 0:
+                self.right_chars, self.speech = create_text(self.test)
+
+
+        if event.key == pygame.K_ESCAPE:
+            pygame.quit()
+
+        #get hint
+        if event.key == pygame.K_SPACE:
+            self.hint_char = self.right_chars[-1]
+            self.timer -= 50
+
+        if event.key == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
         
   def appearance(self):
     self.runtime = pygame.time.get_ticks()
@@ -200,3 +273,34 @@ class MainScreen(Screen):
       self.screen.blit(self.crowd_img2, (int(700 - math.sin(self.runtime/500)*10/2),int(200 - math.sin(self.runtime/(self.speed + 220))*10/2)))
       self.screen.blit(self.tribuna_layer, (0,0)) 
       self.screen.blit(self.politician, (265, 250))
+
+
+    #timer
+    self.timer -= 0.1
+    self.timer = min(self.timer,640)
+    self.timer = max(self.timer,0)
+    pygame.draw.rect(self.screen, (int(255*(1-self.timer/640)),int(255*(self.timer/640)),0), Rect(320,80,self.timer,10))
+
+    #thoughts
+    pygame.draw.ellipse(self.screen, (255,255,255), Rect(365,270,550,250))
+    pygame.draw.ellipse(self.screen, (255,255,255), Rect(590-math.sin(self.runtime/500)*10/2,500-math.sin(self.runtime/500)*10/2,100+math.sin(self.runtime/500)*10,100+math.sin(self.runtime/500)*10))
+
+    #text
+    text_surface = []
+    for i in range(len(self.speech)):
+      text_surface.append(self.my_font.render(str(self.speech[i]), False, (0, 255, 0)))
+    for i in range(len(text_surface)):
+      self.screen.blit(text_surface[i], (450,320+i*40))
+
+    #char
+    char_surface = self.my_font.render(self.char, False, (0, 255, 0))
+    self.screen.blit(char_surface, (635,530))
+
+    #fps
+    hint_surface = self.my_font.render(self.hint_char, False, (0, 255, 0))
+    self.screen.blit(hint_surface, (100,100))
+
+    #fps
+    self.clock.tick()
+    fps_surface = self.my_font.render(str(self.clock.get_fps()), False, (0, 255, 0))
+    self.screen.blit(fps_surface, (10,10))
