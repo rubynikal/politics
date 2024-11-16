@@ -9,6 +9,7 @@ pygame.display.set_caption("Start Screen")
 screen_width = 1280 
 screen_height = 720
 
+
 class Screen:
   def __init__(self, screen):
     self.screen = screen
@@ -161,7 +162,7 @@ class ThirdScreen(Screen):
 
           
 class MainScreen(Screen):
-  def __init__(self,screen, runtime):
+  def __init__(self,screen, runtime, crowd_img1, crowd_img2, crowd_img3, crowd_img4):
     super().__init__(screen)
     #images adn layers
     self.bg_image = pygame.image.load('politics/bg_main.jpeg')
@@ -173,14 +174,10 @@ class MainScreen(Screen):
 
     self.speed = 200
 
-    self.crowd_img1 = pygame.image.load('politics/crowd_img1.png')
-    self.crowd_img1 = pygame.transform.scale(self.crowd_img1, (1110,762))
-    self.crowd_img2 = pygame.image.load('politics/crowd_img2.png')
-    self.crowd_img2 = pygame.transform.scale(self.crowd_img2, (1110,762))
-    self.crowd_img3 = pygame.image.load('politics/crowd_img3.png')
-    self.crowd_img3 = pygame.transform.scale(self.crowd_img3, (1110,762))
-    self.crowd_img4 = pygame.image.load('politics/crowd_img4.png')
-    self.crowd_img4 = pygame.transform.scale(self.crowd_img4, (1110,1100))
+    self.crowd_img1 = crowd_img1
+    self.crowd_img2 = crowd_img2
+    self.crowd_img3 = crowd_img3
+    self.crowd_img4 = crowd_img4
     self.politician = pygame.image.load('politics/politicianw.png')
     self.politician = pygame.transform.scale(self.politician, (750,850))
 
@@ -194,12 +191,11 @@ class MainScreen(Screen):
         
   def appearance(self):
     self.runtime = pygame.time.get_ticks()
-    self.screen.blit(self.bg_image, (0, 0))
-    self.screen.blit(self.crowd_img4, (int(200 - math.sin(self.runtime/500)*10/2),int(-250 - math.sin(self.runtime/(self.speed + 250))*10/2))) 
-    self.screen.blit(self.crowd_img2, (int(-250 - math.sin(self.runtime/500)*10/2),int(50 - math.sin(self.runtime/(self.speed + 200))*10/2))) 
-    self.screen.blit(self.crowd_img3, (int(500 - math.sin(self.runtime/500)*10/2),int(0 - math.sin(self.runtime/(self.speed + 230))*10/2))) 
-    self.screen.blit(self.crowd_img1, (int(180 - math.sin(self.runtime/500)*10/2),int(250 - math.sin(self.runtime/(self.speed + 400))*10/2))) 
-    self.screen.blit(self.crowd_img3, (int(-300 - math.sin(self.runtime/500)*10/2),int(50 - math.sin(self.runtime/(self.speed + 200))*10/2))) 
-    self.screen.blit(self.crowd_img2, (int(700 - math.sin(self.runtime/500)*10/2),int(200 - math.sin(self.runtime/(self.speed + 220))*10/2)))
-    self.screen.blit(self.tribuna_layer, (0,0)) 
-    self.screen.blit(self.politician, (265, 250))
+    if self.runtime % 10 == 0:  
+      self.screen.blit(self.bg_image, (0, 0))
+      self.screen.blit(self.crowd_img3, (int(500 - math.sin(self.runtime/500)*10/2),int(0 - math.sin(self.runtime/(self.speed + 230))*10/2))) 
+      self.screen.blit(self.crowd_img1, (int(-300 - math.sin(self.runtime/500)*10/2),int(120 - math.sin(self.runtime/(self.speed + 400))*10/2))) 
+      self.screen.blit(self.crowd_img3, (int(-300 - math.sin(self.runtime/500)*10/2),int(50 - math.sin(self.runtime/(self.speed + 200))*10/2))) 
+      self.screen.blit(self.crowd_img2, (int(700 - math.sin(self.runtime/500)*10/2),int(200 - math.sin(self.runtime/(self.speed + 220))*10/2)))
+      self.screen.blit(self.tribuna_layer, (0,0)) 
+      self.screen.blit(self.politician, (265, 250))
