@@ -1,7 +1,8 @@
 import pygame
 from pygame.locals import *
 import sys
-from startsc import StartScreen, ThirdScreen, MainScreen
+from startsc import StartScreen, SecondScreen, MainScreen, Loser
+import random
  
 #postojannoe
 pygame.init()
@@ -23,8 +24,7 @@ crowd_img2 = pygame.image.load('politics/crowd_img2.png').convert_alpha()
 crowd_img2 = pygame.transform.scale(crowd_img2, (1110,762))
 crowd_img3 = pygame.image.load('politics/crowd_img3.png').convert_alpha()
 crowd_img3 = pygame.transform.scale(crowd_img3, (1110,762))
-
-
+      
 current_screen = StartScreen(screen)  # Start with the beginning screen
 running = True
 while running:
@@ -32,9 +32,11 @@ while running:
   for event in pygame.event.get():
     next_screen = current_screen.handle_events(event)
     if next_screen == "game":
-      current_screen = ThirdScreen(screen)
+      current_screen = SecondScreen(screen)
     elif next_screen == "game2":
       current_screen =  MainScreen(screen, runtime, crowd_img1, crowd_img2, crowd_img3)
+    elif next_screen == "lose":
+      current_screen = Loser(screen)
 
   FramePerSec.tick()
   print(str(FramePerSec.get_fps()))
