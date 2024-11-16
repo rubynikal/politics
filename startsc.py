@@ -76,7 +76,7 @@ class Choice(Screen):
     if event.type == pygame.QUIT:
       pygame.quit()
       sys.exit()
-    if event.type == pygame.MOUSEBUTTONDOWN:
+    if self.button3_rect.collidepoint(event.pos) or self.button2_rect.collidepoint(event.pos) or self.button1_rect.collidepoint(event.pos):
       if self.button3_rect.collidepoint(event.pos):
         return "game"
       
