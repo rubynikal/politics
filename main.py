@@ -3,9 +3,11 @@ from pygame.locals import *
 import sys
 from startsc import StartScreen, SecondScreen, MainScreen, Loser, Choice, Win
 import random
+
  
 #postojannoe
 pygame.init()
+pygame.mixer.init()
 vec = pygame.math.Vector2  # 2 for two dimensional
 screen_width = 1280 
 screen_height = 720
