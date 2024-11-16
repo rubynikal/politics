@@ -296,6 +296,8 @@ class MainScreen(Screen):
     self.sht = pygame.image.load('politics/sht.png').convert_alpha()
     self.sht = pygame.transform.scale(self.sht, (400, 500))
 
+    #hinti
+    self.showhint = False
 
     self.bodyguardL_rect = self.bodyguardL.get_rect(topleft=(-150, 150))
     self.bodyguardR_rect = self.bodyguardR.get_rect(topleft=(800, 100))
@@ -331,6 +333,7 @@ class MainScreen(Screen):
       if self.bodyguardL_rect.collidepoint(event.pos) or self.bodyguardR_rect.collidepoint(event.pos):
         self.hint_char = self.right_chars[-1] if self.right_chars else ""
         self.timer -= 50
+        self.showhint = True
 
     if self.lose:
       return "lose"
@@ -348,6 +351,7 @@ class MainScreen(Screen):
 
           self.timer += 15
           self.hint_char = ""
+          self.showhint = False
 
           if len(self.right_chars) == 0:
             return "win"
@@ -391,10 +395,7 @@ class MainScreen(Screen):
       self.screen.blit(self.politician, (265, 250))
       self.screen.blit(self.bodyguardR, (800, 100))
       self.screen.blit(self.bodyguardL, (-150, 150))
-      if self.negative:
-        pass #add he fuck you guy
-    
-
+  
     #timer
     self.timer -= 0.1
     if self.timer <=0:
@@ -403,7 +404,6 @@ class MainScreen(Screen):
     self.timer = max(self.timer,0)
     pygame.draw.rect(self.screen, (255,255,255), Rect(320,80,640,10))
     pygame.draw.rect(self.screen, (int(255*(1-self.timer/640)),int(255*(self.timer/640)),0), Rect(320,80,self.timer,10))
-
 
     #thoughts
     pygame.draw.ellipse(self.screen, (255,255,255), Rect(365,150,600,250))
@@ -420,15 +420,21 @@ class MainScreen(Screen):
     char_surface = self.font.render(self.char, False, (0, 0, 0))
     self.screen.blit(char_surface, (630,410))
 
-    #fps
+    #hint
+    if self.showhint:
+      pygame.draw.ellipse(self.screen, (255,255,255), Rect(60,20,150,150))
+      hint_word = self.font.render("Hint:", False, (0, 0, 0))
+      self.screen.blit(hint_word, (100,60))
+
     hint_surface = self.font.render(self.hint_char, False, (0, 0, 0))
     self.screen.blit(hint_surface, (100,100))
 
 class Loser(Screen):
   def __init__(self, screen):
     super().__init__(screen)
-    self.bg_image = pygame.image.load('politics/lose.jpg')
-    self.bg_image = pygame.transform.scale(self.bg_image, (screen_width, screen_height))
+    self.bg_lose = pygame.image.load('politics/booo_tomato.jpg')
+    self.bg_lose = pygame.transform.scale(self.bg_lose, (screen_width, screen_height))
+
     self.font = pygame.font.SysFont("couriernew", 48)
     self.font.set_bold(True)
     self.button_width = 300
@@ -447,7 +453,7 @@ class Loser(Screen):
         return "game"
       
   def appearance(self):
-    self.screen.blit(self.bg_image, (0, 0))
+    self.screen.blit(self.bg_lose, (0, 0))
 
     # Draw the button
     pygame.draw.rect(self.screen, self.button_color, self.button_rect, border_radius=15)
