@@ -218,12 +218,12 @@ class SecondScreen(Screen):
     # Check timing to control image display
     current_time = pygame.time.get_ticks()
         
-    if self.showing_initial and current_time - self.start_time >= 1000:  # 5 seconds for initial img
+    if self.showing_initial and current_time - self.start_time >= 10000:  # 5 seconds for initial img
       self.showing_initial = False
       self.showing_second = True
       self.start_time = pygame.time.get_ticks()
 
-    elif self.showing_second and current_time - self.start_time >= 500:  # 5 seconds for second img
+    elif self.showing_second and current_time - self.start_time >= 5000:  # 5 seconds for second img
       self.showing_second = False  # Prepare for button to appear
 
       # Display images based on state
@@ -463,7 +463,7 @@ class Loser(Screen):
 class Win(Screen):
   def __init__(self, screen, win_sp):
     super().__init__(screen)
-    self.bg_image = pygame.image.load('politics/lose.jpg')
+    self.bg_image = pygame.image.load('politics/bg_win.jpg')
     self.bg_image = pygame.transform.scale(self.bg_image, (screen_width, screen_height))
     self.font = pygame.font.SysFont("couriernew", 48)
     self.font.set_bold(True)
