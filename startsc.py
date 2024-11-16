@@ -371,6 +371,11 @@ class MainScreen(Screen):
           self.timer -= 50
           self.showhint = True
 
+        if event.key == pygame.K_SPACE and self.showhint == False:
+          #self.hint_char = self.right_chars[-1] if self.right_chars else ""
+          self.timer -= 50
+          self.showhint = True
+
         if event.key == pygame.K_ESCAPE:
           pygame.quit()
 
