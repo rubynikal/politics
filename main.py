@@ -23,8 +23,7 @@ crowd_img2 = pygame.image.load('politics/crowd_img2.png').convert_alpha()
 crowd_img2 = pygame.transform.scale(crowd_img2, (1110,762))
 crowd_img3 = pygame.image.load('politics/crowd_img3.png').convert_alpha()
 crowd_img3 = pygame.transform.scale(crowd_img3, (1110,762))
-crowd_img4 = pygame.image.load('politics/crowd_img4.png').convert_alpha()
-crowd_img4 = pygame.transform.scale(crowd_img4, (1110,1100))
+
 
 current_screen = StartScreen(screen)  # Start with the beginning screen
 running = True
@@ -35,7 +34,7 @@ while running:
     if next_screen == "game":
       current_screen = ThirdScreen(screen)
     elif next_screen == "game2":
-      current_screen =  MainScreen(screen, runtime, crowd_img1, crowd_img2, crowd_img3, crowd_img4)
+      current_screen =  MainScreen(screen, runtime, crowd_img1, crowd_img2, crowd_img3)
 
   FramePerSec.tick()
   print(str(FramePerSec.get_fps()))

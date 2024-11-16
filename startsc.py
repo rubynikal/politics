@@ -29,7 +29,8 @@ class StartScreen(Screen):
     self.bg_image = pygame.image.load('politics/bg1.jpg')  
     self.bg_image = pygame.transform.scale(self.bg_image, (screen_width, screen_height))
     self.font = pygame.font.Font(None, 88) 
-    self.text = self.font.render("Welcome to the Game!", True, (255, 255, 255))
+    self.text = self.font.render("Welcome to P.I.E.!", True, (255, 255, 255))
+    self.text2 = self.font.render("Politics Immersion Experience", True, (255, 255, 255))
     self.button_width = 200
     self.button_height = 50
     self.button_color = (0,255,0)
@@ -47,6 +48,7 @@ class StartScreen(Screen):
   def appearance(self):
     self.screen.blit(self.bg_image, (0, 0))
     self.screen.blit(self.text, ((screen_width - self.text.get_width()) // 2, screen_height // 4))
+    self.screen.blit(self.text2, ((screen_width - self.text.get_width()) // 2, screen_height // 4))
 
     # Draw the button
     pygame.draw.rect(self.screen, self.button_color, self.button_rect)
@@ -125,12 +127,12 @@ class ThirdScreen(Screen):
     # Check timing to control image display
     current_time = pygame.time.get_ticks()
         
-    if self.showing_initial and current_time - self.start_time >= 500:  # 5 seconds for initial img
+    if self.showing_initial and current_time - self.start_time >= 5000:  # 5 seconds for initial img
       self.showing_initial = False
       self.showing_second = True
       self.start_time = pygame.time.get_ticks()
 
-    elif self.showing_second and current_time - self.start_time >= 500:  # 5 seconds for second img
+    elif self.showing_second and current_time - self.start_time >= 5000:  # 5 seconds for second img
       self.showing_second = False  # Prepare for button to appear
 
       # Display images based on state
@@ -149,7 +151,7 @@ class ThirdScreen(Screen):
     elif self.show_after_button:
       # Show first burn img, then switch to second after 1 second
       if not self.show_final_image2:
-        if current_time - self.start_time < 100:  # final_image1 for 1 second #!!!!!!!!!!
+        if current_time - self.start_time < 500:  # final_image1 for 1 second #!!!!!!!!!!
           self.screen.blit(self.final_image1, (0, 0))
         else:
           self.show_final_image2 = True  # Switch to final_image2
@@ -162,7 +164,7 @@ class ThirdScreen(Screen):
 
           
 class MainScreen(Screen):
-  def __init__(self,screen, runtime, crowd_img1, crowd_img2, crowd_img3, crowd_img4):
+  def __init__(self,screen, runtime, crowd_img1, crowd_img2, crowd_img3):
     super().__init__(screen)
     #images adn layers
     self.bg_image = pygame.image.load('politics/bg_main.jpeg')
@@ -177,7 +179,6 @@ class MainScreen(Screen):
     self.crowd_img1 = crowd_img1
     self.crowd_img2 = crowd_img2
     self.crowd_img3 = crowd_img3
-    self.crowd_img4 = crowd_img4
     self.politician = pygame.image.load('politics/politicianw.png')
     self.politician = pygame.transform.scale(self.politician, (750,850))
 
@@ -194,7 +195,7 @@ class MainScreen(Screen):
     if self.runtime % 10 == 0:  
       self.screen.blit(self.bg_image, (0, 0))
       self.screen.blit(self.crowd_img3, (int(500 - math.sin(self.runtime/500)*10/2),int(0 - math.sin(self.runtime/(self.speed + 230))*10/2))) 
-      self.screen.blit(self.crowd_img1, (int(-300 - math.sin(self.runtime/500)*10/2),int(120 - math.sin(self.runtime/(self.speed + 400))*10/2))) 
+      self.screen.blit(self.crowd_img1, (int(-300 - math.sin(self.runtime/500)*10/2),int(100 - math.sin(self.runtime/(self.speed + 400))*10/2))) 
       self.screen.blit(self.crowd_img3, (int(-300 - math.sin(self.runtime/500)*10/2),int(50 - math.sin(self.runtime/(self.speed + 200))*10/2))) 
       self.screen.blit(self.crowd_img2, (int(700 - math.sin(self.runtime/500)*10/2),int(200 - math.sin(self.runtime/(self.speed + 220))*10/2)))
       self.screen.blit(self.tribuna_layer, (0,0)) 
