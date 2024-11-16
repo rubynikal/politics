@@ -423,20 +423,32 @@ class MainScreen(Screen):
     pygame.draw.rect(self.screen, (int(255*(1-self.timer/640)),int(255*(self.timer/640)),0), Rect(320,80,self.timer,10))
 
     #thoughts
-    pygame.draw.ellipse(self.screen, (255,255,255), Rect(365,150,600,250))
-    pygame.draw.ellipse(self.screen, (255,255,255), Rect(590-math.sin(self.runtime/500)*10/2,370-math.sin(self.runtime/500)*10/2,100+math.sin(self.runtime/500)*10,100+math.sin(self.runtime/500)*10))
+    pygame.draw.ellipse(self.screen, (255,255,255), Rect(290,150,700,250))
+    pygame.draw.ellipse(self.screen, (255,255,255), Rect(590-math.sin(self.runtime/500)*10/2,390-math.sin(self.runtime/500)*10/2,100+math.sin(self.runtime/500)*10,100+math.sin(self.runtime/500)*10))
 
     #text
     text_surface = []
+    marker_ready = False
     for i in range(len(self.speech)):
+      marker = ""
+      if marker_ready == False:
+        for a in self.speech[i]:
+          if a != "_":
+            marker += " "
+          else:
+            marker += "^"
+            marker_ready = True
+            break
+
       text_surface.append(self.font.render(str(self.speech[i]), False, (0, 0, 0)))
+      text_surface.append(self.font.render(marker, False, (255, 0, 0)))
 
     for i in range(len(text_surface)):
-      self.screen.blit(text_surface[i], (420,200+i*40))
+      self.screen.blit(text_surface[i], (400,200+i*22))
 
     #char
     char_surface = self.font.render(self.char, False, (0, 0, 0))
-    self.screen.blit(char_surface, (630,410))
+    self.screen.blit(char_surface, (630,430))
 
     #hint
     if self.showhint:
@@ -447,6 +459,7 @@ class MainScreen(Screen):
 
     #hint_surface = self.font.render(self.hint_char, False, (0, 0, 0))
     #self.screen.blit(hint_surface, (100,100))
+
 
 class Loser(Screen):
   def __init__(self, screen):
