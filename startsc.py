@@ -40,7 +40,6 @@ class StartScreen(Screen):
       sys.exit()
     if event.type == pygame.MOUSEBUTTONDOWN:
       if self.button_rect.collidepoint(event.pos):
-        print("game")
         return "game"
       
   def appearance(self):
@@ -100,6 +99,7 @@ class ThirdScreen(Screen):
     self.show_after_button = False
     self.show_final_image2 = False
     self.start_time = pygame.time.get_ticks()
+    self.transition_done = False
 
     # Button setup
     self.button_width = 200
@@ -115,6 +115,9 @@ class ThirdScreen(Screen):
       if self.button_rect.collidepoint(event.pos):
         self.show_after_button = True  # Start showing the first final image
         self.start_time = pygame.time.get_ticks()  # Reset timer for final image sequence
+
+    if self.transition_done:
+      return "game2"
 
   def appearance(self):
     # Check timing to control image display
@@ -142,13 +145,39 @@ class ThirdScreen(Screen):
       self.screen.blit(self.button_text, (self.button_rect.x + (self.button_width - self.button_text.get_width()) // 2, self.button_rect.y + (self.button_height - self.button_text.get_height()) // 2))
         
     elif self.show_after_button:
-      # show first burn img then switch to second after 1 sec
+      # Show first burn img, then switch to second after 1 second
       if not self.show_final_image2:
-        if current_time - self.start_time < 1000:  # Show final_image1 for 5 seconds
+        if current_time - self.start_time < 1000:  # final_image1 for 1 second
           self.screen.blit(self.final_image1, (0, 0))
         else:
           self.show_final_image2 = True  # Switch to final_image2
           self.start_time = pygame.time.get_ticks()  # Reset timer
       else:
-        self.screen.blit(self.final_image2, (0, 0))  # Show final_image2
+        if current_time - self.start_time < 500:
+          self.screen.blit(self.final_image2, (0, 0))  # Display final_image2
+        else:
+          self.transition_done = True
+
           
+class MainScreen(Screen):
+  def __init__(self,screen):
+    super().__init__(screen)
+    # Load images
+    self.bg_image = pygame.image.load('politics/bg_main.jpeg')
+    self.bg_image = pygame.transform.scale(self.bg_image, (screen_width, screen_height))
+    self.crowd_img1 = pygame.image.load('politics/crowd_img1.jpg')
+    self.crowd_img2 = pygame.image.load('politics/crowd_img2.jpg')
+    self.crowd_img3 = pygame.image.load('politics/crowd_img3.png')
+    self.politician = pygame.image.load('politics/politicianw.png')
+    self.politician = pygame.transform.scale(self.politician, (750,850))
+
+  def handle_events(self, event):
+    if event.type == pygame.QUIT:
+      pygame.quit()
+      sys.exit()
+    elif event.type == pygame.MOUSEBUTTONDOWN:
+      return "game3"
+        
+  def appearance(self):
+    self.screen.blit(self.bg_image, (0, 0))
+    self.screen.blit(self.politician, (265, 250)) 
