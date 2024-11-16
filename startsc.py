@@ -218,12 +218,12 @@ class SecondScreen(Screen):
     # Check timing to control image display
     current_time = pygame.time.get_ticks()
         
-    if self.showing_initial and current_time - self.start_time >= 10000:  # 5 seconds for initial img
+    if self.showing_initial and current_time - self.start_time >= 1000:  # 5 seconds for initial img
       self.showing_initial = False
       self.showing_second = True
       self.start_time = pygame.time.get_ticks()
 
-    elif self.showing_second and current_time - self.start_time >= 5000:  # 5 seconds for second img
+    elif self.showing_second and current_time - self.start_time >= 1000:  # 5 seconds for second img
       self.showing_second = False  # Prepare for button to appear
 
       # Display images based on state
@@ -329,12 +329,6 @@ class MainScreen(Screen):
       pygame.quit()
       sys.exit()
 
-    elif event.type == pygame.MOUSEBUTTONDOWN:
-      if self.bodyguardL_rect.collidepoint(event.pos) or self.bodyguardR_rect.collidepoint(event.pos):
-        self.hint_char = self.right_chars[-1] if self.right_chars else ""
-        self.timer -= 50
-        self.showhint = True
-
     if self.lose:
       return "lose"
     
@@ -358,9 +352,13 @@ class MainScreen(Screen):
         else:
           self.reaction = "neg"
 
+        if event.key == pygame.K_SPACE and self.showhint == False:
+          #self.hint_char = self.right_chars[-1] if self.right_chars else ""
+          self.timer -= 50
+          self.showhint = True
+
         if event.key == pygame.K_ESCAPE:
           pygame.quit()
-
 
         if event.key == pygame.QUIT:
           pygame.quit()
@@ -413,6 +411,7 @@ class MainScreen(Screen):
     text_surface = []
     for i in range(len(self.speech)):
       text_surface.append(self.font.render(str(self.speech[i]), False, (0, 0, 0)))
+
     for i in range(len(text_surface)):
       self.screen.blit(text_surface[i], (420,200+i*40))
 
@@ -422,12 +421,13 @@ class MainScreen(Screen):
 
     #hint
     if self.showhint:
-      pygame.draw.ellipse(self.screen, (255,255,255), Rect(60,20,150,150))
-      hint_word = self.font.render("Hint:", False, (0, 0, 0))
-      self.screen.blit(hint_word, (100,60))
+      pygame.draw.ellipse(self.screen, (255,255,255), Rect(120,600,200,100))
+      pygame.draw.ellipse(self.screen, (255,255,255), Rect(115,570,40,40))
+      hint_word = self.font.render(str("Hint: "+self.right_chars[-1]), False, (0, 0, 0))
+      self.screen.blit(hint_word, (160,640))
 
-    hint_surface = self.font.render(self.hint_char, False, (0, 0, 0))
-    self.screen.blit(hint_surface, (100,100))
+    #hint_surface = self.font.render(self.hint_char, False, (0, 0, 0))
+    #self.screen.blit(hint_surface, (100,100))
 
 class Loser(Screen):
   def __init__(self, screen):
@@ -467,7 +467,7 @@ class Win(Screen):
     self.bg_image = pygame.transform.scale(self.bg_image, (screen_width, screen_height))
     self.font = pygame.font.SysFont("couriernew", 48)
     self.font.set_bold(True)
-    self.button_width = 300
+    self.button_width = 450
     self.button_height = 70
     self.button_color = (255,255,255)
     self.border_color = (0, 0, 0)
@@ -490,6 +490,6 @@ class Win(Screen):
     pygame.draw.rect(self.screen, self.button_color, self.button_rect, border_radius=15)
     pygame.draw.rect(self.screen, self.border_color, self.button_rect, 5, border_radius=15)  # Black border with width 5
     self.screen.blit(self.button_text, (self.button_rect.x + (self.button_width - self.button_text.get_width()) // 2, self.button_rect.y + (self.button_height - self.button_text.get_height()) // 2))
-    self.screen.blit(self.text, (250, 100))
+    self.screen.blit(self.text, (330, 100))
 
     
