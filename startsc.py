@@ -428,7 +428,6 @@ class MainScreen(Screen):
     #text
     text_surface = []
     marker_ready = False
-    marker_ready = False
     for i in range(len(self.speech)):
       marker = ""
       if marker_ready == False:
@@ -440,27 +439,16 @@ class MainScreen(Screen):
             marker_ready = True
             break
 
-      marker = ""
-      if marker_ready == False:
-        for a in self.speech[i]:
-          if a != "_":
-            marker += " "
-          else:
-            marker += "^"
-            marker_ready = True
-            break
 
       text_surface.append(self.font.render(str(self.speech[i]), False, (0, 0, 0)))
-      text_surface.append(self.font.render(marker, False, (255, 0, 0)))
       text_surface.append(self.font.render(marker, False, (255, 0, 0)))
 
     for i in range(len(text_surface)):
       self.screen.blit(text_surface[i], (400,200+i*22))
-      self.screen.blit(text_surface[i], (400,200+i*22))
+      
 
     #char
     char_surface = self.font.render(self.char, False, (0, 0, 0))
-    self.screen.blit(char_surface, (630,430))
     self.screen.blit(char_surface, (630,430))
 
     #hint
