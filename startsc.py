@@ -10,7 +10,6 @@ pygame.display.set_caption("Start Screen")
 screen_width = 1280 
 screen_height = 720
 
-
 class Screen:
   def __init__(self, screen):
     self.screen = screen
@@ -220,12 +219,12 @@ class SecondScreen(Screen):
     # Check timing to control image display
     current_time = pygame.time.get_ticks()
         
-    if self.showing_initial and current_time - self.start_time >= 1000:  # 5 seconds for initial img
+    if self.showing_initial and current_time - self.start_time >= 10000:  # 5 seconds for initial img
       self.showing_initial = False
       self.showing_second = True
       self.start_time = pygame.time.get_ticks()
 
-    elif self.showing_second and current_time - self.start_time >= 1000:  # 5 seconds for second img
+    elif self.showing_second and current_time - self.start_time >= 5000:  # 5 seconds for second img
       self.showing_second = False  # Prepare for button to appear
 
       # Display images based on state
@@ -469,6 +468,9 @@ class Loser(Screen):
     self.bg_lose = pygame.image.load('politics/booo_tomato.jpg')
     self.bg_lose = pygame.transform.scale(self.bg_lose, (screen_width, screen_height))
 
+    self.neg_sound = pygame.mixer.Sound('politics/boo-6377.mp3')
+    self.neg_sound_played = False
+
     self.font = pygame.font.SysFont("couriernew", 48)
     self.font.set_bold(True)
     self.button_width = 300
@@ -488,6 +490,10 @@ class Loser(Screen):
       
   def appearance(self):
     self.screen.blit(self.bg_lose, (0, 0))
+
+    if not self.neg_sound_played:
+      self.neg_sound.play()
+      self.neg_sound_played = True
 
     # Draw the button
     pygame.draw.rect(self.screen, self.button_color, self.button_rect, border_radius=15)
