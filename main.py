@@ -3,11 +3,9 @@ from pygame.locals import *
 import sys
 from startsc import StartScreen, SecondScreen, MainScreen, Loser, Choice, Win
 import random
-
  
 #postojannoe
 pygame.init()
-pygame.mixer.init()
 vec = pygame.math.Vector2  # 2 for two dimensional
 screen_width = 1280 
 screen_height = 720
@@ -26,8 +24,9 @@ crowd_img2 = pygame.image.load('politics/crowd_img2.png').convert_alpha()
 crowd_img2 = pygame.transform.scale(crowd_img2, (1110,762))
 crowd_img3 = pygame.image.load('politics/crowd_img3.png').convert_alpha()
 crowd_img3 = pygame.transform.scale(crowd_img3, (1110,762))
-      
-current_screen = StartScreen(screen)  # Start with the beginning screen
+    
+
+current_screen = StartScreen(screen) # Start with the beginning screen
 running = True
 winning_score = 0
 while running:
@@ -43,7 +42,7 @@ while running:
     elif next_screen == "lose":
       current_screen = Loser(screen)
     elif next_screen == "win":
-      winning_score += 1
+      winning_score = int(current_screen.timer)
       current_screen = Win(screen, winning_score)
 
   current_screen.appearance()  # Draw the current screen

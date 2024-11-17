@@ -76,8 +76,10 @@ class Choice(Screen):
     if event.type == pygame.QUIT:
       pygame.quit()
       sys.exit()
-    if event.type == pygame.MOUSEBUTTONDOWN:
-      if self.button3_rect.collidepoint(event.pos):
+    elif event.type == pygame.MOUSEBUTTONDOWN:
+      if self.button1_rect.collidepoint(event.pos) or \
+        self.button2_rect.collidepoint(event.pos) or \
+        self.button3_rect.collidepoint(event.pos):
         return "game"
       
   def appearance(self):
@@ -423,20 +425,32 @@ class MainScreen(Screen):
     pygame.draw.rect(self.screen, (int(255*(1-self.timer/640)),int(255*(self.timer/640)),0), Rect(320,80,self.timer,10))
 
     #thoughts
-    pygame.draw.ellipse(self.screen, (255,255,255), Rect(365,150,600,250))
-    pygame.draw.ellipse(self.screen, (255,255,255), Rect(590-math.sin(self.runtime/500)*10/2,370-math.sin(self.runtime/500)*10/2,100+math.sin(self.runtime/500)*10,100+math.sin(self.runtime/500)*10))
+    pygame.draw.ellipse(self.screen, (255,255,255), Rect(290,150,700,250))
+    pygame.draw.ellipse(self.screen, (255,255,255), Rect(590-math.sin(self.runtime/500)*10/2,390-math.sin(self.runtime/500)*10/2,100+math.sin(self.runtime/500)*10,100+math.sin(self.runtime/500)*10))
 
     #text
     text_surface = []
+    marker_ready = False
     for i in range(len(self.speech)):
+      marker = ""
+      if marker_ready == False:
+        for a in self.speech[i]:
+          if a != "_":
+            marker += " "
+          else:
+            marker += "^"
+            marker_ready = True
+            break
+
       text_surface.append(self.font.render(str(self.speech[i]), False, (0, 0, 0)))
+      text_surface.append(self.font.render(marker, False, (255, 0, 0)))
 
     for i in range(len(text_surface)):
-      self.screen.blit(text_surface[i], (420,200+i*40))
+      self.screen.blit(text_surface[i], (400,200+i*22))
 
     #char
     char_surface = self.font.render(self.char, False, (0, 0, 0))
-    self.screen.blit(char_surface, (630,410))
+    self.screen.blit(char_surface, (630,430))
 
     #hint
     if self.showhint:
@@ -447,6 +461,7 @@ class MainScreen(Screen):
 
     #hint_surface = self.font.render(self.hint_char, False, (0, 0, 0))
     #self.screen.blit(hint_surface, (100,100))
+
 
 class Loser(Screen):
   def __init__(self, screen):
@@ -492,7 +507,11 @@ class Win(Screen):
     self.border_color = (0, 0, 0)
     self.button_rect = pygame.Rect((screen_width - self.button_width) // 2, (screen_height - self.button_height) // 2, self.button_width, self.button_height)
     self.button_text = self.font.render("Win some more!", True, (0, 0, 0))
-    self.text = self.font.render(f"Your winning spree: {win_sp}", True, (0, 0, 0))
+    self.text = self.font.render(f"Time score: {win_sp} out of 640", True, (0, 0, 0))
+    
+    #sound
+    self.poz_sound = pygame.mixer.Sound('politics/cheer.mp3')
+    self.poz_sound_played = False
 
   def handle_events(self, event):
     if event.type == pygame.QUIT:
@@ -505,10 +524,12 @@ class Win(Screen):
   def appearance(self):
     self.screen.blit(self.bg_image, (0, 0))
 
+    if not self.poz_sound_played:
+      self.poz_sound.play()
+      self.poz_sound_played = True
+
     # Draw the button
     pygame.draw.rect(self.screen, self.button_color, self.button_rect, border_radius=15)
     pygame.draw.rect(self.screen, self.border_color, self.button_rect, 5, border_radius=15)  # Black border with width 5
     self.screen.blit(self.button_text, (self.button_rect.x + (self.button_width - self.button_text.get_width()) // 2, self.button_rect.y + (self.button_height - self.button_text.get_height()) // 2))
-    self.screen.blit(self.text, (330, 100))
-
-    
+    self.screen.blit(self.text, (290, 100))
