@@ -373,11 +373,6 @@ class MainScreen(Screen):
           self.timer -= 50
           self.showhint = True
 
-        if event.key == pygame.K_SPACE and self.showhint == False:
-          #self.hint_char = self.right_chars[-1] if self.right_chars else ""
-          self.timer -= 50
-          self.showhint = True
-
         if event.key == pygame.K_ESCAPE:
           pygame.quit()
 
@@ -427,9 +422,12 @@ class MainScreen(Screen):
     #thoughts
     pygame.draw.ellipse(self.screen, (255,255,255), Rect(290,150,700,250))
     pygame.draw.ellipse(self.screen, (255,255,255), Rect(590-math.sin(self.runtime/500)*10/2,390-math.sin(self.runtime/500)*10/2,100+math.sin(self.runtime/500)*10,100+math.sin(self.runtime/500)*10))
+    pygame.draw.ellipse(self.screen, (255,255,255), Rect(290,150,700,250))
+    pygame.draw.ellipse(self.screen, (255,255,255), Rect(590-math.sin(self.runtime/500)*10/2,390-math.sin(self.runtime/500)*10/2,100+math.sin(self.runtime/500)*10,100+math.sin(self.runtime/500)*10))
 
     #text
     text_surface = []
+    marker_ready = False
     marker_ready = False
     for i in range(len(self.speech)):
       marker = ""
@@ -442,14 +440,27 @@ class MainScreen(Screen):
             marker_ready = True
             break
 
+      marker = ""
+      if marker_ready == False:
+        for a in self.speech[i]:
+          if a != "_":
+            marker += " "
+          else:
+            marker += "^"
+            marker_ready = True
+            break
+
       text_surface.append(self.font.render(str(self.speech[i]), False, (0, 0, 0)))
+      text_surface.append(self.font.render(marker, False, (255, 0, 0)))
       text_surface.append(self.font.render(marker, False, (255, 0, 0)))
 
     for i in range(len(text_surface)):
       self.screen.blit(text_surface[i], (400,200+i*22))
+      self.screen.blit(text_surface[i], (400,200+i*22))
 
     #char
     char_surface = self.font.render(self.char, False, (0, 0, 0))
+    self.screen.blit(char_surface, (630,430))
     self.screen.blit(char_surface, (630,430))
 
     #hint
@@ -461,6 +472,7 @@ class MainScreen(Screen):
 
     #hint_surface = self.font.render(self.hint_char, False, (0, 0, 0))
     #self.screen.blit(hint_surface, (100,100))
+
 
 
 class Loser(Screen):
