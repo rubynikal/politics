@@ -371,11 +371,6 @@ class MainScreen(Screen):
           self.timer -= 50
           self.showhint = True
 
-        if event.key == pygame.K_SPACE and self.showhint == False:
-          #self.hint_char = self.right_chars[-1] if self.right_chars else ""
-          self.timer -= 50
-          self.showhint = True
-
         if event.key == pygame.K_ESCAPE:
           pygame.quit()
 
@@ -505,7 +500,7 @@ class Win(Screen):
     self.border_color = (0, 0, 0)
     self.button_rect = pygame.Rect((screen_width - self.button_width) // 2, (screen_height - self.button_height) // 2, self.button_width, self.button_height)
     self.button_text = self.font.render("Win some more!", True, (0, 0, 0))
-    self.text = self.font.render(f"Your winning spree: {win_sp}", True, (0, 0, 0))
+    self.text = self.font.render(f"Time score: {win_sp} out of 640", True, (0, 0, 0))
 
   def handle_events(self, event):
     if event.type == pygame.QUIT:
@@ -522,6 +517,6 @@ class Win(Screen):
     pygame.draw.rect(self.screen, self.button_color, self.button_rect, border_radius=15)
     pygame.draw.rect(self.screen, self.border_color, self.button_rect, 5, border_radius=15)  # Black border with width 5
     self.screen.blit(self.button_text, (self.button_rect.x + (self.button_width - self.button_text.get_width()) // 2, self.button_rect.y + (self.button_height - self.button_text.get_height()) // 2))
-    self.screen.blit(self.text, (330, 100))
+    self.screen.blit(self.text, (290, 100))
 
     
