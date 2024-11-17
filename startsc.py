@@ -453,10 +453,10 @@ class MainScreen(Screen):
 
     #hint
     if self.showhint:
-      pygame.draw.ellipse(self.screen, (255,255,255), Rect(120,600,200,100))
-      pygame.draw.ellipse(self.screen, (255,255,255), Rect(115,570,40,40))
+      pygame.draw.ellipse(self.screen, (255,255,255), Rect(170,600,200,100))
+      pygame.draw.ellipse(self.screen, (255,255,255), Rect(195,560,40,40))
       hint_word = self.font.render(str("Hint: "+self.right_chars[-1]), False, (0, 0, 0))
-      self.screen.blit(hint_word, (160,640))
+      self.screen.blit(hint_word, (210,640))
 
     #hint_surface = self.font.render(self.hint_char, False, (0, 0, 0))
     #self.screen.blit(hint_surface, (100,100))
@@ -507,7 +507,7 @@ class Win(Screen):
     self.border_color = (0, 0, 0)
     self.button_rect = pygame.Rect((screen_width - self.button_width) // 2, (screen_height - self.button_height) // 2, self.button_width, self.button_height)
     self.button_text = self.font.render("Win some more!", True, (0, 0, 0))
-    self.text = self.font.render(f"Time score: {win_sp} out of 640", True, (0, 0, 0))
+    self.text = self.font.render(f"Time score: {int(win_sp/640*100)}%", True, (0, 0, 0))
     
     #sound
     self.poz_sound = pygame.mixer.Sound('politics/cheer.mp3')
@@ -532,4 +532,4 @@ class Win(Screen):
     pygame.draw.rect(self.screen, self.button_color, self.button_rect, border_radius=15)
     pygame.draw.rect(self.screen, self.border_color, self.button_rect, 5, border_radius=15)  # Black border with width 5
     self.screen.blit(self.button_text, (self.button_rect.x + (self.button_width - self.button_text.get_width()) // 2, self.button_rect.y + (self.button_height - self.button_text.get_height()) // 2))
-    self.screen.blit(self.text, (290, 100))
+    self.screen.blit(self.text, (410, 100))
