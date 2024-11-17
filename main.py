@@ -47,6 +47,3 @@ while running:
 
   current_screen.appearance()  # Draw the current screen
   current_screen.update()  # Update the display
-
-
-    
